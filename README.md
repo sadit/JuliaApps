@@ -1,16 +1,15 @@
 # JuliaApps: Simple and effective Julia's application workaround for unix based systems
 
+At this moment, there is no standard way to create Julia applications. Different ways exist, but most approaches contain other limitations. This limitation may come from design because Julia includes a powerful REPL that makes CLI unnecessary for Julia practitioners.
+However, people who do not work with Julia could find the Julian way unaccessible.
 
-Julia applications are not standardized at this moment. There exists different ways to achieve it but most approaches contain different limitations,
-most of them are because Julia includes a very interesting and powerful REPL and people working in Julia seems that is not urgent to have another kind of CLI for their programs.
-However, people not working with Julia but only trying to use the programs have a very different opinion.
-While it is expected to have a more standard way to work with Julia's programs soon, I decide to put another piece in the board.
+While we anticipate a more standardized approach to working with Julia's programs soon, I am glad to introduce JuliaApps (`japps`) as a solution today. This script aims to create Julia applications with minor modifications using isolated environments for each application so each app will work out of the box.
 
 
-It consist on a single bash script `japps` that supports some commands:
-- `run`: runs a package as an application
-- `install`: installs a package from its github url
-- `uninstall` (not really working for safety reasons)
+The script `japps` supports the following commands:
+- `run`: runs a package as an application.
+- `install`: installs a package from its GitHub URL.
+- `uninstall` (still not implemented).
 - `update`: updates a package and optionally checkouts some branch to work
 
 
@@ -23,21 +22,22 @@ This procedure only works for unix based systems
 
 # How it works
 
-JuliaApps is a bash script that help to handle packages with entry points that can be called directly from command lines.
+JuliaApps is a bash script that helps to handle packages with entry points that can be called directly from command lines.
 In particular, the idea is to install directly from git repositories and maintain an isolated environment for each package.
-It is designed to be very simple, and working with packages that can be outside of the Julia General registry.
+It is designed to be very simple and work with packages outside the Julia General registry.
 
-The entry points are similar to those created by the [Comonincon.jl](https://comonicon.org/stable/) package, that is, it will call a modele's function called `command_main(ARGS)`
+The entry points are similar to those created by the [Comonincon.jl](https://comonicon.org/stable/) package; that is, it will call a module's function called `command_main(ARGS)`
 
 Some working examples:
 - <https://github.com/sadit/XGrep.jl>
 - <https://github.com/sadit/NearDuplicates.JuliaApps>
 
+By now, we don't have a curate list of applications.
 
 # More help
 
 ```
-./japps --help
+japps --help
 
 Install and run julia packages from command line easily
 
