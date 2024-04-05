@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+
+JULIA=$(which julia)
+
+if [ -z $JULIA ]; then
+  echo "error: julia is not installed"
+  echo "error: install Julia and call $0 again"
+  echo "error: visit https://julialang.org/downloads/ for more information about how to install it"
+  exit 1
+fi
+
+JULIA_APPS=$HOME/.julia/Apps
+
+japps=$0
+command=$1
+shift
+
+helpfun() {
+  echo ""
+  echo "Install and run julia packages from command line easily"
+  echo ""
+  echo " usage: $japps <commands> args..."
+  echo
+  echo " commands: run install unistall update help"
+  echo
+  echo " run app-name args..."
+  echo "    runs an application with the given arguments"
+  echo ""
+  echo " install url-app-repo"
+  echo "    install the app cloning the git repository in the application directory and initializes the directory"
+  echo ""
+  echo " uninstall app-name"
+  echo "    removes the app git local repository"
+  echo ""
+  echo " update app-name [branch or tag]"
+  echo "    updates the app using a pull on the app repository"
+  echo ""
+  echo " INFO:"
+  echo " Julia-Apps directory: $JULIA_APPS"
+  echo " Julia-Binary: $JULIA"
+  exit $1
+}
+
+case "$command" in
+  run)
+    pkg="$1"
+    shift
+    [ -z $pkg ] && helpfun 1
+    export JULIA_PROJECT=$JULIA_APPS/$pkg.jl
+    if [ ! -d "$JULIA_PROJECT" ]; then
+      echo "error: $pkg is not installed in $JULIA_APPS"
+      exit 1
+    fi
+    export JULIA_NUM_THREADS=${JULIA_NUM_THREADS:-auto}
+    $JULIA -e "using $pkg; $pkg.command_main(ARGS)" -- "$@"
+    ;;
+
+  update)
+    pkg="$1"
+    shift
+    [ -z $pkg ] && helpfun 1
+    cd "$JULIA_APPS/$pkg.jl"
+    git pull
+    b=$1
+    if [ ! -z $b ]; then 
+      git checkout $b
+    fi
+    JULIA_PROJECT=$JULIA_APPS/$pkg.jl JULIA_NUM_THREADS=${JULIA_NUM_THREADS:-auto} $JULIA -e "using Pkg; Pkg.resolve(); using $pkg;"
+    
+    ;;
+  install)
+    pkgurl="$1"
+    [ -z $pkgurl ] && helpfun 1 "error: expecting a package url"
+    pkg=$(basename $pkgurl)
+    if [ -d "$JULIA_APPS/$pkg" ]; then
+      echo "$JULIA_APPS/$pkg already exists; you may want to update the app running 'git pull' on the repository"
+      exit 1
+    fi
+    mkdir -p "$JULIA_APPS"
+    [ ! -d "$JULIA_APPS" ] && helpfun 1 "error: the $JULIA_APPS directory is unavailable"
+    cd "$JULIA_APPS"
+    git clone "$pkgurl"
+    pkg_=$(basename $pkg .jl)
+    JULIA_PROJECT="$JULIA_APPS/$pkg" JULIA -e "using Pkg; Pkg.instantiate(); using $pkg_;"
+    ;;
+  uninstall)
+    pkg="$1"
+    shift
+    [ -z $pkg ] && helpfun 1
+    echo " Please remove $JULIA_APPS/$pkg.jl by your self"
+    ;;
+  help)
+    helpfun 0
+    ;;
+  *)
+    helpfun 1
+    ;;
+esac
+
