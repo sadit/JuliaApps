@@ -21,7 +21,7 @@ helpfun() {
   echo ""
   echo " usage: $japps <commands> args..."
   echo
-  echo " commands: run install unistall update help"
+  echo " commands: run install unistall update list help"
   echo
   echo " run app-name args..."
   echo "    runs an application with the given arguments"
@@ -34,6 +34,9 @@ helpfun() {
   echo ""
   echo " update app-name [branch or tag]"
   echo "    updates the app using a pull on the app repository"
+  echo ""
+  echo " list"
+  echo "    list the available applications"
   echo ""
   echo " INFO:"
   echo " Julia-Apps directory: $JULIA_APPS"
@@ -83,11 +86,16 @@ case "$command" in
     pkg_=$(basename $pkg .jl)
     JULIA_PROJECT="$JULIA_APPS/$pkg" JULIA -e "using Pkg; Pkg.instantiate(); using $pkg_;"
     ;;
+
   uninstall)
     pkg="$1"
     shift
     [ -z $pkg ] && helpfun 1
     echo " Please remove $JULIA_APPS/$pkg.jl by your self"
+    ;;
+
+  list)
+    ls $JULIA_APPS
     ;;
   help)
     helpfun 0
