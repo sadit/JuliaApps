@@ -19,7 +19,7 @@ helpfun() {
   echo ""
   echo "Install and run julia packages from command line easily"
   echo ""
-  echo " usage: $japps <commands> args..."
+  echo " usage: $(basename japps) <commands> args..."
   echo
   echo " commands: run install unistall update list help"
   echo
@@ -36,12 +36,16 @@ helpfun() {
   echo "    updates the app using a pull on the app repository"
   echo ""
   echo " list"
-  echo "    list the available applications"
+  echo "    lists the available applications"
   echo ""
   echo " INFO:"
   echo " Julia-Apps directory: $JULIA_APPS"
   echo " Julia-Binary: $JULIA"
   exit $1
+}
+
+prepare() {
+   echo "prepare"
 }
 
 case "$command" in
@@ -84,7 +88,7 @@ case "$command" in
     cd "$JULIA_APPS"
     git clone "$pkgurl"
     pkg_=$(basename $pkg .jl)
-    JULIA_PROJECT="$JULIA_APPS/$pkg" JULIA -e "using Pkg; Pkg.instantiate(); using $pkg_;"
+    JULIA_PROJECT="$JULIA_APPS/$pkg" $JULIA -e "using Pkg; Pkg.instantiate(); using $pkg_;"
     ;;
 
   uninstall)
@@ -97,6 +101,7 @@ case "$command" in
   list)
     ls $JULIA_APPS
     ;;
+
   help)
     helpfun 0
     ;;
