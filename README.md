@@ -30,7 +30,7 @@ The entry points are similar to those created by the [Comonincon.jl](https://com
 
 Some working examples:
 - <https://github.com/sadit/XGrep.jl>
-- <https://github.com/sadit/NearDuplicates.JuliaApps>
+- <https://github.com/sadit/NearDuplicates.jl>
 
 By now, we don't have a curate list of applications.
 
