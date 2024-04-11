@@ -26,7 +26,7 @@ helpfun() {
   echo " run app-name args..."
   echo "    runs an application with the given arguments"
   echo ""
-  echo " install url-app-repo"
+  echo " install url-app-repo [branch or tag]"
   echo "    install the app cloning the git repository in the application directory and initializes the directory"
   echo ""
   echo " uninstall app-name"
@@ -87,6 +87,11 @@ case "$command" in
     [ ! -d "$JULIA_APPS" ] && helpfun 1 "error: the $JULIA_APPS directory is unavailable"
     cd "$JULIA_APPS"
     git clone "$pkgurl"
+    b=$1  # any branch or tag
+    if [ ! -z $b ]; then 
+      cd "$JULIA_APPS/$pkg"
+      git checkout $b
+    fi
     pkg_=$(basename $pkg .jl)
     JULIA_PROJECT="$JULIA_APPS/$pkg" $JULIA -e "using Pkg; Pkg.instantiate(); using $pkg_;"
     ;;
