@@ -43,7 +43,7 @@ Install and run julia packages from command line easily
 
  usage: ./japps <commands> args...
 
- commands: run install unistall update help
+ commands: run install uninstall update help
 
  run app-name args...
     runs an application with the given arguments

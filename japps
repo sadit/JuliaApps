@@ -21,7 +21,7 @@ helpfun() {
   echo ""
   echo " usage: $(basename japps) <commands> args..."
   echo
-  echo " commands: run install unistall update list help"
+  echo " commands: run install uninstall update list help"
   echo
   echo " run app-name args..."
   echo "    runs an application with the given arguments"
