@@ -10,13 +10,14 @@ The script `japps` supports the following commands:
 - `run`: runs a package as an application.
 - `install`: installs a package from its GitHub URL.
 - `uninstall` (still not implemented).
-- `update`: updates a package and optionally checkouts some branch to work
+- `update`: updates a package and optionally checkouts some branch to work.
+- `list`: lists the installed packages.
 
 
 # Installing
 
 
-Clone this repository; `chmod +x japp`; copy `japp` to some directory in your executable path
+Clone this repository; `chmod +x japps`; copy `japps` to some directory in your executable path
 
 This procedure only works for unix based systems
 
